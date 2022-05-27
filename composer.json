@@ -1,0 +1,36 @@
+{
+  "name": "packagit/packagit",
+  "description": "not only module manager but also make artisan command run anywhere",
+  "keywords": ["packagit", "laravel modules", "artisan"],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Yin Qisen",
+      "email": "yinqisen@gmail.com"
+    }
+  ],
+  "bin": [
+    "bin/packagit",
+    "bin/p"
+  ],
+  "autoload": {
+    "psr-4": {
+      "Packagit\\": "src/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Packagit\\Tests\\": "tests/"
+    }
+  },
+  "extra": {
+    "branch-alias": {
+      "dev-master": "3.x-dev"
+    }
+  },
+  "config": {
+    "sort-packages": true
+  },
+  "minimum-stability": "dev",
+  "prefer-stable": true
+}

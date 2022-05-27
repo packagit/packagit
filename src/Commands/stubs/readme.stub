@@ -1,0 +1,34 @@
+# Very short description of the package
+
+[![Latest Version on Packagist](https://img.shields.io/packagist/v/package/$LOWER_NAME$.svg?style=flat-square)](https://packagist.org/packages/package/$LOWER_NAME$)
+[![Build Status](https://img.shields.io/travis/package/$LOWER_NAME$/master.svg?style=flat-square)](https://travis-ci.org/package/$LOWER_NAME$)
+[![Quality Score](https://img.shields.io/scrutinizer/g/package/$LOWER_NAME$.svg?style=flat-square)](https://scrutinizer-ci.com/g/package/$LOWER_NAME$)
+[![Total Downloads](https://img.shields.io/packagist/dt/package/$LOWER_NAME$.svg?style=flat-square)](https://packagist.org/packages/package/$LOWER_NAME$)
+
+This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+
+## Installation
+
+You can install the package via composer:
+
+```bash
+composer require packagit/$LOWER_NAME$
+```
+
+## Usage
+
+``` php
+// Usage description here
+```
+
+### Testing
+
+``` bash
+composer test
+```
+
+### How to create this package
+
+`packagit new $STUDLY_NAME$`
+
+Please see [packagit](https://github.com/packagit/packagit) for more information.

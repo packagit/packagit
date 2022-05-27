@@ -1,0 +1,6 @@
+build
+docs
+vendor
+coverage
+.vscode
+.idea

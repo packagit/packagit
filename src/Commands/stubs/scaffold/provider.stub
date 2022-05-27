@@ -1,0 +1,80 @@
+<?php
+
+namespace $NAMESPACE$\Providers;
+
+use Illuminate\Support\ServiceProvider as BaseServiceProvider;
+use Illuminate\Database\Eloquent\Factory;
+
+class ServiceProvider extends BaseServiceProvider
+{
+
+    /**
+     * @var string $moduleNameLower
+     */
+    protected $moduleNameLower = '$LOWER_NAME$';
+
+    /**
+     * Boot the application events.
+     *
+     * @return void
+     */
+    public function boot()
+    {
+        $this->registerTranslations();
+        $this->registerConfig();
+        $this->registerViews();
+        $this->loadMigrationsFrom(dirname(__DIR__, 2) . '/database/migrations');
+    }
+
+    /**
+     * Register the service provider.
+     *
+     * @return void
+     */
+    public function register()
+    {
+        $this->app->register(RouteServiceProvider::class);
+    }
+
+    /**
+     * Register config.
+     *
+     * @return void
+     */
+    protected function registerConfig()
+    {
+        $this->mergeConfigFrom(
+            dirname(__DIR__, 2) . '/config/config.php', $this->moduleNameLower
+        );
+    }
+
+    /**
+     * Register views.
+     *
+     * @return void
+     */
+    public function registerViews()
+    {
+        $this->loadViewsFrom(dirname(__DIR__, 2) . '/resources/views', $this->moduleNameLower);
+    }
+
+    /**
+     * Register translations.
+     *
+     * @return void
+     */
+    public function registerTranslations()
+    {
+        $this->loadTranslationsFrom(dirname(__DIR__, 2) . '/resources/lang', $this->moduleNameLower);
+    }
+
+    /**
+     * Get the services provided by the provider.
+     *
+     * @return array
+     */
+    public function provides()
+    {
+        return [];
+    }
+}
