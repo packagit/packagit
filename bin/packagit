@@ -26,6 +26,7 @@ $usableCommands = [
     'make:seeder',
     'make:test',
     'db:seed',
+    'test',
 ];
 
 // find laravel project directory
@@ -107,6 +108,7 @@ if ($asModule) {
     require __DIR__ . '/../src/Workaround/FactoryMakeCommand.php';
     require __DIR__ . '/../src/Workaround/SeedCommand.php';
     require __DIR__ . '/../src/Workaround/SeederMakeCommand.php';
+    require __DIR__ . '/../src/Workaround/TestCommand.php';
 }
 
 /*
