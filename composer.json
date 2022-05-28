@@ -1,8 +1,8 @@
 {
   "name": "packagit/packagit",
-  "description": "not only module manager but also make artisan command run anywhere",
+  "description": "amazing laravel module management with hacking tricks",
   "keywords": ["packagit", "laravel modules", "artisan"],
-  "license": "MIT",
+  "license": "Apache-2.0",
   "authors": [
     {
       "name": "Yin Qisen",
@@ -21,11 +21,6 @@
   "autoload-dev": {
     "psr-4": {
       "Packagit\\Tests\\": "tests/"
-    }
-  },
-  "extra": {
-    "branch-alias": {
-      "dev-master": "3.x-dev"
     }
   },
   "config": {
