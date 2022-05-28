@@ -104,6 +104,7 @@ return [
             'scaffold/provider' => 'src/Providers/ServiceProvider.php',
             'seeder'            => 'database/seeders/DatabaseSeeder.php',
             'route-provider'    => 'src/Providers/RouteServiceProvider.php',
+            'command-provider'  => 'src/Providers/CommandServiceProvider.php',
             'composer'          => 'composer.json',
             'assets/js/app'     => 'resources/assets/js/app.js',
             'assets/sass/app'   => 'resources/assets/sass/app.scss',
@@ -122,6 +123,7 @@ return [
             'scaffold/provider' => ['NAMESPACE', 'LOWER_NAME'],
             'seeder'            => ['NAMESPACE'],
             'route-provider'    => ['NAMESPACE', 'STUDLY_NAME', 'MODULE_NAMESPACE'],
+            'command-provider'  => ['NAMESPACE'],
             'composer'          => [
                 'LOWER_NAME',
                 'STUDLY_NAME',

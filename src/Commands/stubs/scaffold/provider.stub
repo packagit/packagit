@@ -24,6 +24,8 @@ class ServiceProvider extends BaseServiceProvider
         $this->registerConfig();
         $this->registerViews();
         $this->loadMigrationsFrom(dirname(__DIR__, 2) . '/database/migrations');
+
+        // Event::listen(UserCreated::class, UserCreatedListener::class);
     }
 
     /**
@@ -34,6 +36,7 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
+        $this->app->register(CommandServiceProvider::class);
     }
 
     /**

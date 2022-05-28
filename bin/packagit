@@ -129,7 +129,7 @@ if ($asModule) {
     $reflection = new ReflectionClass($app);
     $property = $reflection->getProperty('namespace');
     $property->setAccessible(true);
-    $property->setValue($app, "Pacakgit\\{$moduleName}\\");
+    $property->setValue($app, "Packagit\\{$moduleName}\\");
     $property->setAccessible(false);
 }
 
@@ -151,7 +151,7 @@ if ($asModule && $input->hasArgument('name') && $grabCommand === 'make:controlle
     $content = file_get_contents($fileName);
 
     $content = str_replace(
-        "use Pacakgit\Http\Controllers\Controller;\n",
+        "use Packagit\Http\Controllers\Controller;\n",
         '',
         $content,
     );
