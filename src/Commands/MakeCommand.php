@@ -77,6 +77,9 @@ class MakeCommand extends Command
         $this->generateFolders();
         $this->generateFiles();
 
+        // composer dumpautoload
+        @exec('composer dumpautoload');
+
         $this->info("Package [{$this->packageName}] created successfully");
     }
 
