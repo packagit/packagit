@@ -70,8 +70,9 @@ class MakeCommand extends Command
         $this->module->setPackageName($this->packageName);
 
         $this->laravel->config->set('modules', array_merge(
-            $this->laravel->config->get('modules', []),
             require dirname(__DIR__, 2) . '/config/config.php',
+            $this->laravel->config->get('modules', []),
+           
         ));
 
         $this->generateFolders();
