@@ -1,6 +1,6 @@
 # Packagit
 
-Packagit is amazing laravel modules management, you could manage huge project with many separate laravel packagit. 
+Packagit is amazing laravel modules management, you could manage huge project with many separate laravel modules. 
 
 You could run `packagit` or a short name `p`, such as `p new Auth`, a module named Auth would be created.
 
