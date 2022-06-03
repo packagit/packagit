@@ -12,6 +12,22 @@ return [
     // YOU COULD CUSTOM HERE
     'namespace' => 'Packagit',
 
+    /*
+    |--------------------------------------------------------------------------
+    | Composer File Template
+    |--------------------------------------------------------------------------
+    |
+    | YOU COULD CUSTOM HERE
+    |
+    */
+    'composer'  => [
+        'vendor' => 'packagit',
+        'author' => [
+            'name'  => 'Yin Qisen',
+            'email' => 'v@yinqisen.cn',
+        ],
+    ],
+
     'paths' => [
         'modules' => base_path('modules'),
 
@@ -36,22 +52,6 @@ return [
         */
 
         'migration' => base_path('database/migrations'),
-
-        /*
-        |--------------------------------------------------------------------------
-        | Composer File Template
-        |--------------------------------------------------------------------------
-        |
-        | YOU COULD CUSTOM HERE
-        |
-        */
-        'composer'  => [
-            'vendor' => 'packagit',
-            'author' => [
-                'name'  => 'Yin Qisen',
-                'email' => 'v@yinqisen.cn',
-            ],
-        ],
 
         /*
         |--------------------------------------------------------------------------
