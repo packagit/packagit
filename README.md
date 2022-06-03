@@ -1,10 +1,10 @@
 # Packagit
 
-Packagit is amazing laravel modules management, you could manage huge project with many separate laravel modules. 
+Packagit is amazing laravel modules management, you could manage huge project with many separate laravel packagit. 
 
 You could run `packagit` or a short name `p`, such as `p new Auth`, a module named Auth would be created.
 
-You can make artisan command running anywhere, All the artisan commands are identical using with packagit like following table.
+You can make artisan command running anywhere, All the packagit commands are same with artisan like following table.
 
 | artisan                     | packagit          |
 |-----------------------------|-------------------|
@@ -67,21 +67,25 @@ export PATH=$HOME/.composer/vendor/bin:$PATH
 
 ## Usage
 
-`packagit new ModuleName`
+**1. Create a new module**
 
-There is only one `new` command for packagit, and other commands reuse laravel artisan, isn't it amazing?
+run `packagit new ModuleName`
 
-Yeah, packagit did!
-
-and another useful trick:
+you also could group many modules as `Components` or others you want.
 
 ```
 packagit new Components/NetUtil
 packagit new Components/Updater
 packagit new Components/Downloader
+packagit new Components/A/B/C/...
 ```
 
-you also could group many modules as `Components` or others you want.
+**2. Custom package namespace**
+
+run `p custom`
+
+config/packagit.php file would be created, you could customize namespace by edit this file.
+
 
 ### A Module Structure:
 

@@ -28,7 +28,7 @@ class Module
      */
     public function config(string $key, $default = null)
     {
-        return config('modules.' . $key, $default);
+        return config('packagit.' . $key, $default);
     }
 
     /**
@@ -44,6 +44,20 @@ class Module
     public function getStudlyName()
     {
         return Str::studly($this->packageName);
+    }
+
+    /**
+     * Get class namespace.
+     *
+     * @return string
+     */
+    public function getClassNamespace()
+    {
+        $namespace = $this->config('namespace');
+        $namespace .= '\\' . $this->getStudlyName();
+        $namespace = str_replace('/', '\\', $namespace);
+
+        return trim($namespace, '\\');
     }
 
     /**

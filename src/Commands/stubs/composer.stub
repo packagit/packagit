@@ -1,6 +1,6 @@
 {
-    "name": "packagit/$LOWER_NAME$",
-    "description": "",
+    "name": "$VENDOR$/$LOWER_NAME$",
+    "description": "$STUDLY_NAME$ module made by packagit",
     "authors": [
         {
             "name": "$AUTHOR_NAME$",

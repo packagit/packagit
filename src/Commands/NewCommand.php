@@ -9,7 +9,7 @@ use Packagit\Support\Stub;
 use Illuminate\Filesystem\Filesystem;
 use Packagit\Support\Config\GenerateConfigReader;
 
-class MakeCommand extends Command
+class NewCommand extends Command
 {
 
     /**
@@ -69,9 +69,9 @@ class MakeCommand extends Command
         $this->module = new Module();
         $this->module->setPackageName($this->packageName);
 
-        $this->laravel->config->set('modules', array_merge(
-            $this->laravel->config->get('modules', []),
+        $this->laravel->config->set('packagit', array_merge(
             require dirname(__DIR__, 2) . '/config/config.php',
+            $this->laravel->config->get('packagit', []),
         ));
 
         $this->generateFolders();
@@ -100,7 +100,7 @@ class MakeCommand extends Command
      */
     public function getFolders()
     {
-        return config('modules.paths.generator');
+        return config('packagit.paths.generator');
     }
 
     /**
@@ -115,10 +115,10 @@ class MakeCommand extends Command
                 continue;
             }
 
-            $path = config('modules.paths.modules') . '/' . $this->argument('name') . '/' . $folder->getPath();
+            $path = config('packagit.paths.modules') . '/' . $this->argument('name') . '/' . $folder->getPath();
 
             $this->filesystem->makeDirectory($path, 0755, true);
-            if (config('modules.stubs.gitkeep')) {
+            if (config('packagit.stubs.gitkeep')) {
                 $this->generateGitKeep($path);
             }
         }
@@ -141,7 +141,7 @@ class MakeCommand extends Command
      */
     public function getFiles()
     {
-        return config('modules.stubs.files');
+        return config('packagit.stubs.files');
     }
 
     /**
@@ -150,7 +150,7 @@ class MakeCommand extends Command
     public function generateFiles()
     {
         foreach ($this->getFiles() as $stub => $file) {
-            $path = config('modules.paths.modules') . '/' . $this->argument('name') . '/' . $file;
+            $path = config('packagit.paths.modules') . '/' . $this->argument('name') . '/' . $file;
 
             if (!$this->filesystem->isDirectory($dir = dirname($path))) {
                 $this->filesystem->makeDirectory($dir, 0775, true);
@@ -169,20 +169,6 @@ class MakeCommand extends Command
     public function getClass()
     {
         return class_basename($this->argument('name'));
-    }
-
-    /**
-     * Get class namespace.
-     *
-     * @return string
-     */
-    public function getClassNamespace()
-    {
-        $namespace = $this->module->config('namespace');
-        $namespace .= '\\' . $this->module->getStudlyName();
-        $namespace = str_replace('/', '\\', $namespace);
-
-        return trim($namespace, '\\');
     }
 
     /**
@@ -210,7 +196,7 @@ class MakeCommand extends Command
      */
     protected function getReplacement($stub)
     {
-        $replacements = config('modules.stubs.replacements');
+        $replacements = config('packagit.stubs.replacements');
 
         if (!isset($replacements[$stub])) {
             return [];
@@ -243,7 +229,7 @@ class MakeCommand extends Command
      */
     protected function getNameSpaceReplacement()
     {
-        return $this->getClassNamespace();
+        return $this->module->getClassNamespace();
     }
 
     /**
