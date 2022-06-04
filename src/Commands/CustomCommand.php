@@ -4,7 +4,7 @@ namespace Packagit\Commands;
 
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
-use Laravel\Package\Exceptions\FileAlreadyExistException;
+use Packagit\Exceptions\FileAlreadyExistException;
 
 class CustomCommand extends Command
 {
