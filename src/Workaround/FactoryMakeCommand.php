@@ -75,7 +75,7 @@ class FactoryMakeCommand extends GeneratorCommand
         }
 
         $replace = [
-            '{{ factoryNamespace }}' => 'Packagit\\' . $this->laravel->packagitModuleName . '\\' . $namespace,
+            '{{ factoryNamespace }}' => $this->laravel->moduleClassNamespace . '\\' . $namespace,
             'NamespacedDummyModel' => $namespaceModel,
             '{{ namespacedModel }}' => $namespaceModel,
             '{{namespacedModel}}' => $namespaceModel,
