@@ -101,9 +101,14 @@ if ($asModule) {
     $moduleName = substr($workDir, strrpos($workDir, '/') + 1);
     echo "Work Module: " . substr($workDir, $startPos) . PHP_EOL;
 
+    $composer = json_decode(file_get_contents($workDir . DIRECTORY_SEPARATOR . 'composer.json'), true);
+    $classNamespace = array_keys($composer['autoload']['psr-4'])[0];
+    $classNamespace = \Illuminate\Support\Str::before($classNamespace, '\\');
+    unset($composer);
+
     $app->useAppPath($workDir . '/src');
     $app->useDatabasePath($workDir . '/database');
-    $app->packagitModuleName = $moduleName;
+    $app->moduleClassNamespace = $classNamespace . '\\' . $moduleName;
 
     require __DIR__ . '/../src/Workaround/TestMakeCommand.php';
     require __DIR__ . '/../src/Workaround/FactoryMakeCommand.php';
@@ -127,11 +132,6 @@ $kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
 
 // inject namespace
 if ($asModule) {
-    $composer = json_decode(file_get_contents($workDir . DIRECTORY_SEPARATOR . 'composer.json'), true);
-    $classNamespace = array_keys($composer['autoload']['psr-4'])[0];
-    $classNamespace = \Illuminate\Support\Str::before($classNamespace, '\\');
-    unset($composer);
-
     $reflection = new ReflectionClass($app);
     $property = $reflection->getProperty('namespace');
     $property->setAccessible(true);

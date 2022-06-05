@@ -94,6 +94,6 @@ class SeederMakeCommand extends GeneratorCommand
      */
     protected function getNamespace($name)
     {
-        return 'Packagit\\' . $this->laravel->packagitModuleName . '\\Database\\Seeders';;
+        return $this->laravel->moduleClassNamespace . '\\Database\\Seeders';;
     }
 }

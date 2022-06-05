@@ -92,7 +92,7 @@ class TestMakeCommand extends GeneratorCommand
      */
     protected function rootNamespace()
     {
-        return 'Packagit\\' . $this->laravel->packagitModuleName . '\\Tests';
+        return $this->laravel->moduleClassNamespace . '\\Tests';
     }
 
     /**
