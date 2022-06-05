@@ -67,7 +67,13 @@ export PATH=$HOME/.composer/vendor/bin:$PATH
 
 ## Usage
 
-**1. Create a new module**
+**1. Custom package namespace (Optional)**
+
+run `p custom`
+
+`config/packagit.php` file would be created, you could customize namespace by edit this file, skip here if you don't need custom.
+
+**2. Create a new module**
 
 run `packagit new ModuleName`
 
@@ -77,15 +83,7 @@ you also could group many modules as `Components` or others you want.
 packagit new Components/NetUtil
 packagit new Components/Updater
 packagit new Components/Downloader
-packagit new Components/A/B/C/...
 ```
-
-**2. Custom package namespace**
-
-run `p custom`
-
-config/packagit.php file would be created, you could customize namespace by edit this file.
-
 
 ### A Module Structure:
 
