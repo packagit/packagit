@@ -85,7 +85,7 @@ class SeedCommand extends Command
         $class = $this->input->getArgument('class') ?? $this->input->getOption('class');
 
         if (strpos($class, '\\') === false) {
-            $class = 'Database\\Seeders\\'.$class;
+            $class = app()->moduleClassNamespace.'\\Database\\Seeders\\'.$class;
         }
 
         if ($class === 'Database\\Seeders\\DatabaseSeeder' &&
@@ -130,7 +130,7 @@ class SeedCommand extends Command
     protected function getOptions()
     {
         return [
-            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', app()->moduleClassNamespace . '\\Database\\Seeders\\DatabaseSeeder'],
+            ['class', null, InputOption::VALUE_OPTIONAL, 'The class name of the root seeder', app()->moduleClassNamespace.'\\Database\\Seeders\\DatabaseSeeder'],
             ['database', null, InputOption::VALUE_OPTIONAL, 'The database connection to seed'],
             ['force', null, InputOption::VALUE_NONE, 'Force the operation to run when in production'],
         ];

@@ -1,31 +1,10 @@
 #!/usr/bin/env php
 <?php
 
+// command prefix start with
 $usableCommands = [
-    'make:cast',
-    'make:channel',
-    'make:command',
-    'make:component',
-    'make:controller',
-    'make:event',
-    'make:exception',
-    'make:factory',
-    'make:job',
-    'make:listener',
-    'make:mail',
-    'make:middleware',
-    'make:migration',
-    'make:model',
-    'make:notification',
-    'make:observer',
-    'make:policy',
-    'make:provider',
-    'make:request',
-    'make:resource',
-    'make:rule',
-    'make:seeder',
-    'make:test',
-    'db:seed',
+    'make:',
+    'db:s',
     'test',
 ];
 
@@ -92,7 +71,7 @@ $asModule = $workDir !== $rootDir;
 $input = new Symfony\Component\Console\Input\ArgvInput;
 $grabCommand = $input->getFirstArgument();
 
-if (!in_array($grabCommand, $usableCommands)) {
+if (!\Illuminate\Support\Str::startsWith($grabCommand, $usableCommands)) {
     $asModule = false;
 }
 
