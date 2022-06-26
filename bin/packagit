@@ -132,27 +132,25 @@ $property->setAccessible(false);
 $status = $kernel->handle($input, new Symfony\Component\Console\Output\ConsoleOutput);
 
 // make:controller workaround for module
-if ($asModule && $input->hasArgument('name') && $grabCommand === 'make:controller') {
-    if ($input->getArgument('name')) {
-        $fileName = $workDir . '/src/Http/Controllers/' . str_replace('\\', '/', $input->getArgument('name')) . '.php';
-        $content = file_get_contents($fileName);
-    
+if ($asModule && $input->hasArgument('name') && $input->getArgument('name') && $grabCommand === 'make:controller') {
+    $fileName = $workDir . '/src/Http/Controllers/' . str_replace('\\', '/', $input->getArgument('name')) . '.php';
+    $content = file_get_contents($fileName);
+
+    $content = str_replace(
+        str_replace('$NAMESPACE$', $classNamespace, "use \$NAMESPACE\$\Http\Controllers\Controller;\n"),
+        '',
+        $content,
+    );
+
+    if (strpos($content, 'use App\Http\Controllers\Controller;') === false) {
         $content = str_replace(
-            str_replace('$NAMESPACE$', $classNamespace, "use \$NAMESPACE\$\Http\Controllers\Controller;\n"),
-            '',
-            $content,
+            "use Illuminate\Http\Request;",
+            "use Illuminate\Http\Request;\nuse App\Http\Controllers\Controller;",
+            $content
         );
-    
-        if (strpos($content, 'use App\Http\Controllers\Controller;') === false) {
-            $content = str_replace(
-                "use Illuminate\Http\Request;",
-                "use Illuminate\Http\Request;\nuse App\Http\Controllers\Controller;",
-                $content
-            );
-        }
-    
-        file_put_contents($fileName, $content);
     }
+
+    file_put_contents($fileName, $content);
 }
 
 /*
