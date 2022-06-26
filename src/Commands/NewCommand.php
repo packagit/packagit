@@ -17,7 +17,7 @@ class NewCommand extends Command
      *
      * @var Filesystem
      */
-    private $filesystem;
+    protected $filesystem;
 
     /**
      * The module instance.
@@ -29,7 +29,7 @@ class NewCommand extends Command
     /**
      * @var string
      */
-    private $packageName;
+    protected $packageName;
 
     /**
      * The console command name.
