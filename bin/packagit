@@ -132,7 +132,7 @@ $property->setAccessible(false);
 $status = $kernel->handle($input, new Symfony\Component\Console\Output\ConsoleOutput);
 
 // make:controller workaround for module
-if ($asModule && $input->hasArgument('name') && $input->getArgument('name') && $grabCommand === 'make:controller') {
+if ($asModule && $grabCommand === 'make:controller' && $input->getArgument('name')) {
     $fileName = $workDir . '/src/Http/Controllers/' . str_replace('\\', '/', $input->getArgument('name')) . '.php';
     $content = file_get_contents($fileName);
 
