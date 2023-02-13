@@ -1,2 +1,172 @@
-#!/usr/bin/env bash
-packagit "$@"
+#!/usr/bin/env php
+<?php
+
+// command prefix start with
+$usableCommands = [
+    'make:',
+    'db:s',
+    'test',
+];
+
+// find laravel project directory
+$rootDir = $workDir = getcwd();
+while (1) {
+    if (file_exists($rootDir . DIRECTORY_SEPARATOR . 'bootstrap' . DIRECTORY_SEPARATOR . 'app.php')) {
+        break;
+    }
+
+    $pos = strrpos($rootDir, DIRECTORY_SEPARATOR);
+    if ($pos === false) {
+        echo "Can't find laravel project in current path" . PHP_EOL;
+        echo "You should run 'packagit' under a laravel project" . PHP_EOL;
+        return 1;
+    }
+
+    $rootDir = substr($rootDir, 0, strrpos($rootDir, DIRECTORY_SEPARATOR));
+}
+
+if (!file_exists($rootDir . '/vendor/autoload.php')) {
+    echo "You should run composer install first";
+    return 1;
+}
+
+$startPos = strpos($workDir, DIRECTORY_SEPARATOR . 'modules' . DIRECTORY_SEPARATOR);
+if ($startPos === false) {
+    $workDir = $rootDir;
+}
+
+while ($startPos != false) {
+    if (file_exists($workDir . DIRECTORY_SEPARATOR . 'composer.json')) {
+        break;
+    }
+
+    $pos = strrpos($workDir, DIRECTORY_SEPARATOR);
+    if ($pos === false) {
+        $workDir = $rootDir;
+        return 1;
+    }
+
+    $workDir = substr($workDir, 0, strrpos($workDir, DIRECTORY_SEPARATOR));
+}
+
+/*
+|--------------------------------------------------------------------------
+| Register The Auto Loader
+|--------------------------------------------------------------------------
+|
+| Composer provides a convenient, automatically generated class loader
+| for our application. We just need to utilize it! We'll require it
+| into the script here so that we do not have to worry about the
+| loading of any our classes "manually". Feels great to relax.
+|
+*/
+
+define('LARAVEL_START', microtime(true));
+
+require __DIR__ . '/../vendor/autoload.php';
+require $rootDir . '/vendor/autoload.php';
+$app = require_once $rootDir . '/bootstrap/app.php';
+
+$asModule = $workDir !== $rootDir;
+$input = new Symfony\Component\Console\Input\ArgvInput;
+$grabCommand = $input->getFirstArgument();
+if (is_null($grabCommand)) {
+    $grabCommand = '';
+}
+
+if (!\Illuminate\Support\Str::startsWith($grabCommand, $usableCommands)) {
+    $asModule = false;
+}
+
+// change path for module
+if ($asModule) {
+    $moduleName = substr($workDir, strrpos($workDir, '/') + 1);
+    echo "Work Module: " . substr($workDir, $startPos) . PHP_EOL;
+
+    $composer = json_decode(file_get_contents($workDir . DIRECTORY_SEPARATOR . 'composer.json'), true);
+    $classNamespace = array_keys($composer['autoload']['psr-4'])[0];
+    $classNamespace = \Illuminate\Support\Str::before($classNamespace, '\\');
+    unset($composer);
+
+    $app->useAppPath($workDir . '/src');
+    $app->useDatabasePath($workDir . '/database');
+    $app->moduleClassNamespace = $classNamespace . '\\' . $moduleName;
+
+    require __DIR__ . '/../src/Workaround/TestMakeCommand.php';
+    require __DIR__ . '/../src/Workaround/FactoryMakeCommand.php';
+    require __DIR__ . '/../src/Workaround/SeedCommand.php';
+    require __DIR__ . '/../src/Workaround/SeederMakeCommand.php';
+    require __DIR__ . '/../src/Workaround/TestCommand.php';
+}
+
+/*
+|--------------------------------------------------------------------------
+| Run The Artisan Application
+|--------------------------------------------------------------------------
+|
+| When we run the console application, the current CLI command will be
+| executed in this console and the response sent back to a terminal
+| or another output device for the developers. Here goes nothing!
+|
+*/
+
+$kernel = $app->make(Illuminate\Contracts\Console\Kernel::class);
+
+// inject namespace
+if ($asModule) {
+    $reflection = new ReflectionClass($app);
+    $property = $reflection->getProperty('namespace');
+    $property->setAccessible(true);
+    $property->setValue($app, "{$classNamespace}\\{$moduleName}\\");
+    $property->setAccessible(false);
+}
+
+// inject MakeCommand
+$reflection = new ReflectionClass($kernel);
+$property = $reflection->getProperty('commands');
+$property->setAccessible(true);
+$commands = $property->getValue($kernel);
+
+$commands[] = \Packagit\Commands\NewCommand::class;
+$commands[] = \Packagit\Commands\CustomCommand::class;
+$property->setValue($kernel, $commands);
+$property->setAccessible(false);
+
+$status = $kernel->handle($input, new Symfony\Component\Console\Output\ConsoleOutput);
+
+// make:controller workaround for module
+if ($asModule && $grabCommand === 'make:controller' && $input->getArgument('name')) {
+    $fileName = $workDir . '/src/Http/Controllers/' . str_replace('\\', '/', $input->getArgument('name')) . '.php';
+    $content = file_get_contents($fileName);
+
+    $content = str_replace(
+        str_replace('$NAMESPACE$', $classNamespace, "use \$NAMESPACE\$\Http\Controllers\Controller;\n"),
+        '',
+        $content,
+    );
+
+    if (strpos($content, 'use App\Http\Controllers\Controller;') === false) {
+        $content = str_replace(
+            "use Illuminate\Http\Request;",
+            "use Illuminate\Http\Request;\nuse App\Http\Controllers\Controller;",
+            $content
+        );
+    }
+
+    file_put_contents($fileName, $content);
+}
+
+/*
+|--------------------------------------------------------------------------
+| Shutdown The Application
+|--------------------------------------------------------------------------
+|
+| Once Artisan has finished running, we will fire off the shutdown events
+| so that any final work may be done by the application before we shut
+| down the process. This is the last thing to happen to the request.
+|
+*/
+
+$kernel->terminate($input, $status);
+
+exit($status);
