@@ -80,17 +80,22 @@ if (!\Illuminate\Support\Str::startsWith($grabCommand, $usableCommands)) {
 
 // change path for module
 if ($asModule) {
-    $moduleName = substr($workDir, strrpos($workDir, '/') + 1);
+    $moduleName = substr($workDir, strrpos($workDir, DIRECTORY_SEPARATOR) + 1);
     echo "Work Module: " . substr($workDir, $startPos) . PHP_EOL;
 
     $composer = json_decode(file_get_contents($workDir . DIRECTORY_SEPARATOR . 'composer.json'), true);
-    $classNamespace = array_keys($composer['autoload']['psr-4'])[0];
-    $classNamespace = \Illuminate\Support\Str::before($classNamespace, '\\');
+    if ($classNamespace = array_search('src', $composer['autoload']['psr-4'], true)) {
+        $classNamespace = substr($classNamespace, 0, -1);
+    } else {
+        $classNamespace =  array_keys($composer['autoload']['psr-4'])[0];
+        $classNamespace = \Illuminate\Support\Str::before($classNamespace, '\\');
+        $classNamespace .= '\\' . \Illuminate\Support\Str::studly($moduleName);
+    }
     unset($composer);
 
     $app->useAppPath($workDir . '/src');
     $app->useDatabasePath($workDir . '/database');
-    $app->moduleClassNamespace = $classNamespace . '\\' . $moduleName;
+    $app->moduleClassNamespace = $classNamespace;
 
     require __DIR__ . '/../src/Workaround/TestMakeCommand.php';
     require __DIR__ . '/../src/Workaround/FactoryMakeCommand.php';
@@ -117,7 +122,7 @@ if ($asModule) {
     $reflection = new ReflectionClass($app);
     $property = $reflection->getProperty('namespace');
     $property->setAccessible(true);
-    $property->setValue($app, "{$classNamespace}\\{$moduleName}\\");
+    $property->setValue($app, $classNamespace . '\\');
     $property->setAccessible(false);
 }
 
