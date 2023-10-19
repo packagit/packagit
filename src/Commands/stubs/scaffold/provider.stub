@@ -36,9 +36,7 @@ class ServiceProvider extends BaseServiceProvider
     public function register()
     {
         $this->app->register(RouteServiceProvider::class);
-        if ($this->app->runningInConsole()) {
-            $this->app->register(CommandServiceProvider::class);
-        }
+        $this->app->register(CommandServiceProvider::class);
     }
 
     /**
